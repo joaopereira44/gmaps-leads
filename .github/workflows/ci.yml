@@ -1,0 +1,59 @@
+name: CI e release
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+
+jobs:
+  check:
+    name: Sintaxe e manifest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Sintaxe dos scripts
+        run: |
+          for f in hook.js content.js background.js vendor/xlsx.mini.min.js; do
+            node --check "$f" && echo "OK $f"
+          done
+      - name: Manifest valido e versao bate com a tag
+        run: |
+          node -e '
+            const m = require("./manifest.json");
+            if (m.manifest_version !== 3) throw new Error("manifest_version deve ser 3");
+            for (const f of [...m.content_scripts.flatMap(c => [...c.js, ...(c.css||[])]), m.background.service_worker, ...Object.values(m.icons)]) {
+              if (!require("fs").existsSync(f)) throw new Error("arquivo citado no manifest nao existe: " + f);
+            }
+            const tag = (process.env.GITHUB_REF || "").replace("refs/tags/v", "");
+            if (process.env.GITHUB_REF?.startsWith("refs/tags/") && tag !== m.version) throw new Error(`tag v${tag} != manifest ${m.version}`);
+            console.log("manifest ok, versao", m.version);
+          '
+
+  release:
+    name: Empacotar e publicar release
+    needs: check
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Zip da extensao (so o que o Chrome carrega)
+        run: |
+          mkdir -p dist
+          zip -r "dist/gmaps-leads-${GITHUB_REF_NAME}.zip" \
+            manifest.json hook.js content.js background.js panel.css vendor icons \
+            -x 'icons/gerar.py' 'icons/__pycache__/*'
+          unzip -l "dist/gmaps-leads-${GITHUB_REF_NAME}.zip"
+      - name: Release no GitHub
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.zip
+          generate_release_notes: true
+      # Publicar na Chrome Web Store: quando houver conta de desenvolvedor,
+      # adicionar aqui um step com chrome-webstore-upload-cli usando os secrets
+      # EXTENSION_ID, CLIENT_ID, CLIENT_SECRET e REFRESH_TOKEN.

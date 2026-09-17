@@ -1,0 +1,42 @@
+{
+  "manifest_version": 3,
+  "name": "GMaps Leads KISS",
+  "version": "0.3.1",
+  "description": "Captura em tempo real os negocios que aparecem no Google Maps enquanto voce navega, sem repetir e sem limite, busca e-mails nos sites e exporta CSV ou XLSX.",
+  "icons": { "16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png", "128": "icons/icon128.png" },
+  "action": {
+    "default_title": "GMaps Leads: abrir ou fechar o painel",
+    "default_icon": { "16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png", "128": "icons/icon128.png" }
+  },
+  "permissions": ["storage", "unlimitedStorage"],
+  "host_permissions": ["https://*/*", "http://*/*"],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.google.com/maps/*",
+        "https://www.google.com.br/maps/*",
+        "https://www.google.pt/maps/*",
+        "https://www.google.com.ar/maps/*",
+        "https://www.google.es/maps/*",
+        "https://www.google.com.mx/maps/*"
+      ],
+      "js": ["hook.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": [
+        "https://www.google.com/maps/*",
+        "https://www.google.com.br/maps/*",
+        "https://www.google.pt/maps/*",
+        "https://www.google.com.ar/maps/*",
+        "https://www.google.es/maps/*",
+        "https://www.google.com.mx/maps/*"
+      ],
+      "js": ["vendor/xlsx.mini.min.js", "content.js"],
+      "css": ["panel.css"],
+      "run_at": "document_end"
+    }
+  ]
+}

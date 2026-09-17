@@ -1,0 +1,78 @@
+#gml-panel {
+  position: fixed;
+  right: 16px;
+  bottom: 24px;
+  z-index: 2147483000;
+  width: 300px;
+  background: #fff;
+  color: #202124;
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(0,0,0,.20);
+  font: 13px/1.4 Roboto, "Segoe UI", Arial, sans-serif;
+  overflow: visible;
+  user-select: none;
+}
+#gml-panel.gml-hidden { display: none; }
+#gml-panel * { box-sizing: border-box; }
+
+#gml-panel .gml-head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 14px; background: #1a73e8; color: #fff;
+  border-radius: 14px 14px 0 0; cursor: move; font-weight: 600; font-size: 14px;
+}
+#gml-panel .gml-head svg { width: 18px; height: 18px; flex: none; }
+#gml-panel .gml-head .gml-title { flex: 1; }
+#gml-panel .gml-head button {
+  background: transparent; border: 0; color: #fff; font-size: 18px; line-height: 1; cursor: pointer; padding: 2px 4px; opacity: .9;
+}
+#gml-panel .gml-head button:hover { opacity: 1; }
+
+#gml-panel .gml-body { padding: 18px 16px 14px; text-align: center; }
+#gml-panel .gml-count { font-size: 44px; font-weight: 700; line-height: 1; letter-spacing: -1px; }
+#gml-panel .gml-count-label { color: #5f6368; margin-top: 4px; font-size: 13px; }
+#gml-panel .gml-status { margin: 14px 0 4px; font-weight: 600; color: #5f6368; display: flex; align-items: center; justify-content: center; gap: 7px; }
+#gml-panel .gml-status .gml-dot { width: 8px; height: 8px; border-radius: 50%; background: #9aa0a6; }
+#gml-panel .gml-status.gml-on { color: #1a73e8; }
+#gml-panel .gml-status.gml-on .gml-dot { background: #1a73e8; box-shadow: 0 0 0 4px rgba(26,115,232,.18); animation: gml-pulse 1.6s infinite; }
+#gml-panel .gml-status.gml-paused { color: #e37400; }
+#gml-panel .gml-status.gml-paused .gml-dot { background: #e37400; }
+@keyframes gml-pulse { 0%,100% { box-shadow: 0 0 0 3px rgba(26,115,232,.18); } 50% { box-shadow: 0 0 0 6px rgba(26,115,232,.08); } }
+#gml-panel .gml-sub { color: #80868b; font-size: 12px; min-height: 16px; }
+
+#gml-panel .gml-primary {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; margin-top: 16px; padding: 13px 12px; border: 0; border-radius: 10px;
+  background: #1a73e8; color: #fff; font-size: 15px; font-weight: 700; cursor: pointer;
+}
+#gml-panel .gml-primary:hover { background: #1765cc; }
+#gml-panel .gml-primary.gml-pause { background: #f29900; }
+#gml-panel .gml-primary.gml-pause:hover { background: #e37400; }
+#gml-panel .gml-primary svg { width: 16px; height: 16px; }
+
+#gml-panel .gml-row { display: flex; gap: 10px; margin-top: 10px; position: relative; }
+#gml-panel .gml-row > button {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 11px 10px; border-radius: 10px; border: 1px solid #dadce0; background: #fff;
+  color: #3c4043; font-weight: 600; font-size: 13px; cursor: pointer; white-space: nowrap;
+}
+#gml-panel .gml-row > button:hover { background: #f1f3f4; }
+#gml-panel .gml-row > button:disabled { opacity: .45; cursor: default; background: #fff; }
+#gml-panel .gml-row > button svg { width: 15px; height: 15px; }
+#gml-panel .gml-export { color: #1a73e8; border-color: #c2d7f7 !important; }
+#gml-panel .gml-export .gml-caret { margin-left: 2px; font-size: 10px; }
+
+#gml-panel .gml-menu {
+  position: absolute; right: 0; bottom: calc(100% + 6px); min-width: 160px;
+  background: #fff; border: 1px solid #dadce0; border-radius: 10px; box-shadow: 0 6px 20px rgba(0,0,0,.16);
+  padding: 6px; display: none; z-index: 2;
+}
+#gml-panel .gml-menu.gml-open { display: block; }
+#gml-panel .gml-menu button {
+  display: flex; align-items: center; gap: 8px; width: 100%; padding: 9px 10px; border: 0; border-radius: 7px;
+  background: transparent; color: #202124; text-align: left; font-weight: 600; font-size: 13px; cursor: pointer;
+}
+#gml-panel .gml-menu button:hover { background: #f1f3f4; }
+#gml-panel .gml-menu button small { color: #80868b; font-weight: 400; margin-left: auto; }
+
+#gml-panel .gml-foot { margin-top: 14px; font-size: 11px; color: #9aa0a6; }
+#gml-panel .gml-flash { color: #188038; font-size: 11px; min-height: 14px; margin-top: 6px; }
